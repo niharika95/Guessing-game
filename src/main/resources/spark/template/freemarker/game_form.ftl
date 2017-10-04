@@ -19,8 +19,7 @@
       </#if>
       
       <form action="./guess" method="POST">
-        Guess a number between 0 and 9. You have ${guessesLeft} guess<#if
-guessesLeft gt 1>es</#if> left.
+        Guess a number between 0 and ${upperBound - 1}. You have ${guessesLeft} guess<#if guessesLeft gt 1>es</#if> left.
         <br/>
         <input name="myGuess" />
         <br/><br/>

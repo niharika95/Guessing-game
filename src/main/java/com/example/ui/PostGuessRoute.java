@@ -101,7 +101,7 @@ public class PostGuessRoute implements TemplateViewRoute {
     final GuessGame game = gameCenter.get(session);
     vm.put(GetGameRoute.GAME_BEGINS_ATTR, game.isGameBeginning());
     vm.put(GetGameRoute.GUESSES_LEFT_ATTR, game.guessesLeft());
-
+    vm.put(GetGameRoute.UPPER_BOUND_ATTR, game.getUpperBound());
     // retrieve request parameter
     final String guessStr = request.queryParams(GUESS_PARAM);
 
@@ -136,7 +136,7 @@ public class PostGuessRoute implements TemplateViewRoute {
     // no, but you have more guesses?
     else if (game.hasMoreGuesses()) {
       vm.put(GetGameRoute.GUESSES_LEFT_ATTR, game.guessesLeft());
-
+      vm.put(GetGameRoute.UPPER_BOUND_ATTR, game.getUpperBound());
       if(game.isGuessMore(guess)){
         vm.put("HINT",GUESSISMORE);
       }
