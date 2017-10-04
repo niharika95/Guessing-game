@@ -137,4 +137,12 @@ public class GuessGame {
   public synchronized String toString() {
     return "{Game " + numberToGuess + "}";
   }
+
+  public boolean isGuessMore(int guess) {
+    if (guess > numberToGuess){
+      return true;
+    }
+    else
+      return false;
+  }
 }

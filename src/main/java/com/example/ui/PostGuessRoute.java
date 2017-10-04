@@ -13,6 +13,8 @@ import spark.TemplateViewRoute;
 import com.example.appl.GameCenter;
 import com.example.model.GuessGame;
 
+import static com.example.ui.GetHomeRoute.CURRENT_GAME_STATS_MSG_ATTR;
+
 /**
  * The {@code POST /guess} route handler.
  *
@@ -32,6 +34,9 @@ public class PostGuessRoute implements TemplateViewRoute {
   static final String ERROR_TYPE = "error";
   static final String BAD_GUESS = "Nope, try again...";
   static final String VIEW_NAME = "game_form.ftl";
+
+  String GUESSISMORE = "The number is lower than your guess.";
+  String GUESSISLESS = "The number is higher than your guess.";
 
   //
   // Static methods
@@ -123,12 +128,20 @@ public class PostGuessRoute implements TemplateViewRoute {
     // did you win?
     if (correct) {
       gameCenter.setGlobalGamesWon(gameCenter.getGlobalGamesWon() + 1);
+      gameCenter.setLocalGamesWon(gameCenter.getLocalGamesWon() + 1);
       System.out.println("Games won: " + gameCenter.getGlobalGamesWon());
+      System.out.println("Local games won: " + gameCenter.getLocalGamesWon());
       return youWon(vm, session);
     }
     // no, but you have more guesses?
     else if (game.hasMoreGuesses()) {
       vm.put(GetGameRoute.GUESSES_LEFT_ATTR, game.guessesLeft());
+
+      if(game.isGuessMore(guess)){
+        vm.put("HINT",GUESSISMORE);
+      }
+      else
+        vm.put("HINT",GUESSISLESS);
       return error(vm, BAD_GUESS);
     }
     // otherwise, you lost
@@ -159,6 +172,7 @@ public class PostGuessRoute implements TemplateViewRoute {
     gameCenter.end(session);
     // report application-wide game statistics
     vm.put(GetHomeRoute.GAME_STATS_MSG_ATTR, gameCenter.getGameStatsMessage());
+    vm.put(CURRENT_GAME_STATS_MSG_ATTR, gameCenter.getCurrentGameStatsMessage());
     vm.put(YOU_WON_ATTR, youWon);
     return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
   }

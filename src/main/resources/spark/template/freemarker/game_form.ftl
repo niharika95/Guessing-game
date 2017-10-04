@@ -11,7 +11,11 @@
       <h4>Make <#if isFirstGuess>a<#else>Another</#if> Guess</h4>
       
       <#if message??>
-      <div class="message ${messageType}">${message}</div>
+        <div class="message ${messageType}">${message}</div>
+      </#if>
+
+      <#if HINT??>
+        <div class="message hint">${HINT}</div>
       </#if>
       
       <form action="./guess" method="POST">

@@ -24,6 +24,10 @@ public class GameCenter {
   final static String ONE_GAME_MESSAGE = "One game has been played so far and the average win is %3.2f percent.";
   final static String GAMES_PLAYED_FORMAT = "There have been %d games played and the average win is %3.2f percent.";
 
+  final static String LOCAL_NO_GAMES_MESSAGE = "No game stats yet.";
+  final static String LOCAL_NO_WINS_GAME_MESSAGE = "You have not won a game, yet. But I *feel* your luck changing.";
+  final static String LOCAL_GAMES_PLAYED_FORMAT = "You have won an average of %3.2f percent of this session's %d games.";
+
   /**
    * The user session attribute name that points to a game object.
    */
@@ -34,7 +38,8 @@ public class GameCenter {
   //
 
   private int totalGames = 0;
-  //NIHARIKA//
+  private int localGamesWon = 0;
+  private int localGames = 0;
   private int globalGamesWon = 0;
 
   public int getGlobalGamesWon() {
@@ -45,7 +50,21 @@ public class GameCenter {
     this.globalGamesWon = globalGamesWon;
   }
 
-  //~NIHARIKA//
+  public int getLocalGamesWon() {
+    return localGamesWon;
+  }
+
+  public void setLocalGamesWon(int localGamesWon) {
+    this.localGamesWon = localGamesWon;
+  }
+
+  public int getLocalGames() {
+    return localGames;
+  }
+
+  public void setLocalGames(int localGames) {
+    this.localGames = localGames;
+  }
 
   //
   // Public methods
@@ -90,6 +109,7 @@ public class GameCenter {
     // do some application-wide book-keeping
     synchronized (this) {  // protect the critical code
       totalGames++;
+      localGames++;
     }
   }
 
@@ -112,5 +132,16 @@ public class GameCenter {
     }
   }
 
-  public String get
+  public synchronized String getCurrentGameStatsMessage() {
+    double avg;
+    if (localGames > 1) {
+      avg = ((double) localGamesWon /(double)localGames)*100;
+      if (localGamesWon == 0){
+        return LOCAL_NO_WINS_GAME_MESSAGE;
+      }
+      return String.format(LOCAL_GAMES_PLAYED_FORMAT, localGames, avg);
+    }else {
+      return LOCAL_NO_GAMES_MESSAGE;
+    }
+  }
 }

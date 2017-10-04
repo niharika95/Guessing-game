@@ -30,6 +30,7 @@ public class GetHomeRoute implements TemplateViewRoute {
 
   static final String TITLE_ATTR = "title";
   static final String GAME_STATS_MSG_ATTR = "gameStatsMessage";
+  static final String CURRENT_GAME_STATS_MSG_ATTR = "currentGameStatsMessage";
   static final String NEW_SESSION_ATTR = "newSession";
   static final String TITLE = "Welcome to the Guessing Game";
   static final String VIEW_NAME = "home.ftl";
@@ -72,8 +73,13 @@ public class GetHomeRoute implements TemplateViewRoute {
     // report application-wide game statistics
     vm.put(GAME_STATS_MSG_ATTR, gameCenter.getGameStatsMessage());
 
+    // report current session game statistics
+    vm.put(CURRENT_GAME_STATS_MSG_ATTR, gameCenter.getCurrentGameStatsMessage());
+
     // if this is a brand new browser session
     if (httpSession.isNew()) {
+      gameCenter.setLocalGamesWon(0);
+      gameCenter.setLocalGames(0);
       // render the Game Form view
       vm.put(NEW_SESSION_ATTR, true);
       return new ModelAndView(vm, VIEW_NAME);

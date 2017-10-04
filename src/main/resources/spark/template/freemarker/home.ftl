@@ -14,6 +14,12 @@
         ${gameStatsMessage}
       </p>
 
+      <h2>Current Stats</h2>
+      <p>
+        ${currentGameStatsMessage}
+      </p>
+
+
       <#if newSession>
         <p>
           <a href="/game">Want to play a game?!?</a>
